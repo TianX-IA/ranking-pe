@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ranking-PE | Ranking-Aware Prompt Optimization for Multimodal Clinical Diagnosis</title>
+  <meta name="description" content="Ranking-PE aligns reflective prompt optimization with AUROC through pair-level Pareto scores, ranking-shaped feedback, and AUROC-based prompt selection.">
+  <meta name="theme-color" content="#325dcc">
+  <meta property="og:title" content="Ranking-PE: Ranking-Aware Prompt Optimization">
+  <meta property="og:description" content="Aligning multimodal clinical prompt optimization with ranking quality.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://tianx-ia.github.io/ranking-pe/assets/overview.png">
+  <meta name="citation_title" content="Ranking-Aware Prompt Optimization for Multimodal Clinical Diagnosis">
+  <meta name="citation_author" content="Tian Xia">
+  <meta name="citation_author" content="Minghao Liu">
+  <meta name="citation_author" content="Yiqing Liang">
+  <meta name="citation_author" content="Laixi Shi">
+  <meta name="citation_author" content="Jiayun Wang">
+  <meta name="citation_pdf_url" content="https://tianx-ia.github.io/ranking-pe/assets/paper.pdf">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#abstract">Skip to content</a>
+<header class="site-header">
+  <nav class="nav-shell" aria-label="Main navigation">
+    <a class="wordmark" href="#top"><span class="mark" aria-hidden="true">↗</span> Ranking-PE</a>
+    <div class="nav-links"><a href="#method">Method</a><a href="#results">Results</a><a href="#citation">Citation</a><a class="nav-paper" href="assets/paper.pdf">Paper <span aria-hidden="true">↗</span></a></div>
+  </nav>
+</header>
+<main id="top">
+  <section class="hero container" aria-labelledby="paper-title">
+    <p class="eyebrow">Multimodal clinical diagnosis · Research project</p>
+    <p class="project-name">Ranking-PE</p>
+    <h1 id="paper-title">Ranking-Aware Prompt Optimization for<br class="desktop-break"> Multimodal Clinical Diagnosis</h1>
+    <div class="authors" aria-label="Authors">
+      <span>Tian Xia<sup>1,5</sup></span><span>Minghao Liu<sup>2</sup></span><span>Yiqing Liang<sup>3</sup></span><span>Laixi Shi<sup>4</sup></span><span>Jiayun Wang<sup>5</sup></span>
+    </div>
+    <div class="affiliations"><span><sup>1</sup>Harvard University</span><span><sup>2</sup>Accenture</span><span><sup>3</sup>Luma AI</span><span><sup>4</sup>Johns Hopkins University</span><span><sup>5</sup>Georgia Institute of Technology</span></div>
+    <div class="contacts"><a href="mailto:tianxia@g.harvard.edu">tianxia@g.harvard.edu</a><span aria-hidden="true">·</span><a href="mailto:pjwang@gatech.edu">pjwang@gatech.edu</a></div>
+    <div class="hero-actions"><a class="button primary" href="assets/paper.pdf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h6"/></svg>Read the paper</a><a class="button secondary" href="#results">Explore results <span aria-hidden="true">↓</span></a></div>
+    <p class="hero-summary">Optimizing clinical prompts for how well they rank positive and negative cases.</p>
+  </section>
+
+  <section class="abstract-band" id="abstract">
+    <div class="reading-width">
+      <p class="section-kicker">The idea</p><h2>Align prompt search with ranking quality.</h2>
+      <p>High classification accuracy can conceal poor discrimination when clinical labels are imbalanced. Reflective prompt optimization methods that score individual predictions by correctness can therefore select prompts that perform poorly on ranking metrics.</p>
+      <p>We introduce <strong>Ranking-PE</strong>, which aligns three components of reflective prompt optimization with AUROC: a pair-level Pareto score matrix, ranking-shaped feedback, and final prompt selection by validation AUROC. Each matrix row compares a positive case with a negative case, so its average measures pairwise ordering rather than classification accuracy.</p>
+      <p>On three MIMIC disease tasks, Ranking-PE improves mean test AUROC over Accuracy-PE by <strong>5.8 percentage points</strong> on Qwen3-VL-8B with vision-encoder-tuned SFT and <strong>16.2 points</strong> on MedGemma-4B. Component ablations examine the contributions of the search objective and feedback.</p>
+      <p class="small-note">Website summary of the paper. Gains compare the reported, rounded disease averages in Table 1.</p>
+    </div>
+  </section>
+
+  <section class="section container" id="motivation">
+    <div class="section-heading"><p class="section-kicker">01 / Motivation</p><h2>Accuracy and ranking ask different questions.</h2><p>A thresholded answer describes one operating point. AUROC evaluates the ordering of positive and negative cases across thresholds.</p></div>
+    <figure class="paper-figure"><a href="assets/overview.png" target="_blank" rel="noopener" aria-label="Open the task and evaluation overview at full resolution"><img src="assets/overview.png" width="2200" height="1153" alt="Paper overview: chest X-ray and clinical context feed a multimodal model; the evaluation contrasts accuracy with AUROC, followed by visual adaptation and prompt evolution." decoding="async"></a><figcaption><span>Figure 1.</span> Multimodal clinical inputs, the evaluation objective, and the two-stage adaptation pipeline. Figure reproduced from the paper.</figcaption></figure>
+  </section>
+
+  <section class="section method-section" id="method">
+    <div class="container">
+      <div class="section-heading"><p class="section-kicker">02 / Method</p><h2>From instance correctness to pairwise ordering.</h2><p>After visual adaptation, Ranking-PE uses the same ranking objective throughout prompt search.</p></div>
+      <figure class="paper-figure method-figure"><a href="assets/method.png" target="_blank" rel="noopener" aria-label="Open the Ranking-PE method diagram at full resolution"><img src="assets/method.png" width="2200" height="1349" alt="Ranking-PE pipeline: positive-negative pairs form a Pareto score matrix, ranking-shaped feedback guides reflection, and the best prompt is selected by validation AUROC." loading="lazy" decoding="async"></a><figcaption><span>Figure 2.</span> Pair-level Pareto scores, ranking-shaped feedback, and AUROC-based selection. Figure reproduced from the paper.</figcaption></figure>
+      <div class="method-steps">
+        <article><span class="step-number">01</span><h3>Pair-level Pareto scores</h3><p>A row represents a positive-negative pair. Correct ordering scores 1, a tie scores ½, and reversed ordering scores 0. The average over all pairs equals empirical AUROC.</p></article>
+        <article><span class="step-number">02</span><h3>Ranking-shaped feedback</h3><p>The reflector receives the clinical error type, confidence magnitude, and rank context relative to a reference score distribution.</p></article>
+        <article><span class="step-number">03</span><h3>AUROC-based selection</h3><p>The final prompt is selected by validation AUROC. Ranking quality therefore informs both the search and its final decision.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section container" id="results">
+    <div class="section-heading"><p class="section-kicker">03 / Evaluation</p><h2>Results across three clinical tasks.</h2><p>Test performance on Atelectasis, Cardiomegaly, and Consolidation. Compare the prompt optimization recipes within each backbone.</p></div>
+    <div class="result-highlights">
+      <div><span class="gain">+5.8 <small>AUROC pp</small></span><p>Qwen3-VL-8B + SFT <span>(VE-tuned)</span></p></div>
+      <div><span class="gain">+16.2 <small>AUROC pp</small></span><p>MedGemma-4B</p></div>
+      <p class="highlight-note">Ranking-PE compared with Accuracy-PE.<br>Unweighted average across the three disease tasks.</p>
+    </div>
+    <div class="results-panel">
+      <div class="result-controls">
+        <div class="segmented" role="group" aria-label="Model backbone"><button type="button" data-model="qwen" aria-pressed="true">Qwen3-VL-8B + SFT</button><button type="button" data-model="medgemma" aria-pressed="false">MedGemma-4B</button></div>
+        <div class="segmented metric-switch" role="group" aria-label="Evaluation metric"><button type="button" data-metric="auroc" aria-pressed="true">AUROC</button><button type="button" data-metric="balacc" aria-pressed="false">Balanced accuracy</button></div>
+      </div>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable test results table"><table id="results-table"><caption id="results-caption">Qwen3-VL-8B + SFT (VE-tuned) · Test AUROC (%)</caption><thead><tr><th scope="col">Method</th><th scope="col">Atelectasis</th><th scope="col">Cardiomegaly</th><th scope="col">Consolidation</th><th scope="col" class="avg">Avg</th></tr></thead><tbody><tr><th scope="row">No PE</th><td>63.3</td><td>68.0</td><td>72.6</td><td class="avg">68.0</td></tr>
+<tr><th scope="row">Accuracy-PE</th><td>63.6</td><td>68.1</td><td>72.4</td><td class="avg">68.0</td></tr>
+<tr><th scope="row">BAcc-Select</th><td>63.9</td><td>67.6</td><td>71.4</td><td class="avg">67.6</td></tr>
+<tr><th scope="row">Class-Weighted PE</th><td>64.3</td><td>68.2</td><td>71.5</td><td class="avg">68.0</td></tr>
+<tr><th scope="row">Scalar-AUROC PE</th><td>66.5</td><td>69.3</td><td>72.9</td><td class="avg">69.6</td></tr>
+<tr><th scope="row">Ranking-PE <span class="ours-tag">Ours</span></th><td>70.7</td><td>71.3</td><td>79.3</td><td class="avg">73.8</td></tr></tbody></table></div>
+      <p class="table-note">PE entries are means over three runs; No PE entries are means only. Avg is the unweighted mean across disease means. Per-disease SDs are reported in the paper appendix. No aggregate SD is inferred.</p>
+      <p id="result-status" class="sr-only" aria-live="polite"></p>
+    </div>
+    <p class="source-note">Source: Table 1 of the paper. Values are percentages. The complete table, including zero-shot closed-source models and their scoring qualifications, is available in the <a href="assets/paper.pdf#page=8">PDF</a>.</p>
+  </section>
+
+  <section class="section ablation-section" id="ablation">
+    <div class="container ablation-layout">
+      <div><p class="section-kicker">04 / Ablation</p><h2>Each part of the search matters.</h2><p>Changing only final selection to AUROC does not recover the full result in this experiment. Adding pair-level Pareto scores and ranking feedback yields the highest average AUROC among the reported configurations.</p><p class="small-note">Qwen3-VL-8B + SFT (VE-tuned). Mean test AUROC (%), averaged equally across the three diseases. Source: Table 3.</p></div>
+      <div class="ablation-bars" role="img" aria-label="Average AUROC: Accuracy-PE 68.0; plus AUROC final selection 61.3; plus pair-level Pareto 70.7; plus ranking feedback, full Ranking-PE, 73.8; full Ranking-PE without pair-level Pareto 65.8. Bars start at zero and use a 0 to 100 scale.">
+        <div class="bar-row"><div class="bar-label"><span>Accuracy-PE</span><strong>68.0</strong></div><div class="bar-track"><span style="width:68%"></span></div></div>
+        <div class="bar-row"><div class="bar-label"><span>+ AUROC final selection</span><strong>61.3</strong></div><div class="bar-track"><span style="width:61.3%"></span></div></div>
+        <div class="bar-row"><div class="bar-label"><span>+ Pair-level Pareto</span><strong>70.7</strong></div><div class="bar-track"><span style="width:70.7%"></span></div></div>
+        <div class="bar-row full"><div class="bar-label"><span>+ Ranking feedback <em>Full method</em></span><strong>73.8</strong></div><div class="bar-track"><span style="width:73.8%"></span></div></div>
+        <div class="bar-row removal"><div class="bar-label"><span>Full method without pair-level Pareto</span><strong>65.8</strong></div><div class="bar-track"><span style="width:65.8%"></span></div></div>
+        <div class="bar-axis"><span>0</span><span>Test AUROC (%)</span><span>100</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scope reading-width"><h2>Scope of the evidence</h2><p>These results concern three disease tasks from one retrospective cohort. They do not establish performance on other populations or prospective clinical utility. The work studies evaluation and optimization methodology, rather than a clinically validated diagnostic system.</p></section>
+
+  <section class="section citation-section" id="citation"><div class="reading-width"><div class="citation-heading"><div><p class="section-kicker">Reference</p><h2>Citation</h2></div><button class="copy-button" type="button" id="copy-citation">Copy BibTeX</button></div><pre><code id="bibtex">@misc{xia2026rankingaware,
+  title  = {Ranking-Aware Prompt Optimization for
+            Multimodal Clinical Diagnosis},
+  author = {Tian Xia and Minghao Liu and Yiqing Liang
+            and Laixi Shi and Jiayun Wang},
+  year   = {2026},
+  note   = {Preprint},
+  url    = {https://tianx-ia.github.io/ranking-pe/}
+}</code></pre><p id="copy-status" class="small-note" role="status" aria-live="polite"></p></div></section>
+</main>
+<footer><div class="container"><span>Ranking-PE · 2026</span><p>Project-page layout inspired by <a href="https://modomodo-rl.github.io/">MoDoMoDo</a>. Figures and results are from our paper.</p><a href="#top">Back to top ↑</a></div></footer>
+<script type="application/json" id="results-data">{"qwen": [{"method": "No PE", "auroc": [63.3, 68.0, 72.6, 68.0], "balacc": [45.7, 59.5, 62.5, 55.9]}, {"method": "Accuracy-PE", "auroc": [63.6, 68.1, 72.4, 68.0], "balacc": [45.4, 58.0, 61.8, 55.1]}, {"method": "BAcc-Select", "auroc": [63.9, 67.6, 71.4, 67.6], "balacc": [43.7, 60.6, 63.3, 55.9]}, {"method": "Class-Weighted PE", "auroc": [64.3, 68.2, 71.5, 68.0], "balacc": [44.2, 61.3, 61.8, 55.8]}, {"method": "Scalar-AUROC PE", "auroc": [66.5, 69.3, 72.9, 69.6], "balacc": [65.5, 63.1, 61.2, 63.3]}, {"method": "Ranking-PE", "auroc": [70.7, 71.3, 79.3, 73.8], "balacc": [70.9, 66.5, 68.5, 68.6]}], "medgemma": [{"method": "No PE", "auroc": [46.7, 61.1, 70.1, 59.3], "balacc": [47.5, 56.2, 62.0, 55.2]}, {"method": "Accuracy-PE", "auroc": [46.4, 53.4, 60.7, 53.5], "balacc": [47.9, 49.8, 51.7, 49.8]}, {"method": "BAcc-Select", "auroc": [49.5, 57.4, 70.2, 59.0], "balacc": [54.4, 57.5, 64.0, 58.6]}, {"method": "Class-Weighted PE", "auroc": [47.8, 50.3, 69.1, 55.7], "balacc": [51.2, 49.8, 63.4, 54.8]}, {"method": "Scalar-AUROC PE", "auroc": [44.1, 57.4, 71.3, 57.6], "balacc": [51.1, 53.1, 60.3, 54.8]}, {"method": "Ranking-PE", "auroc": [69.1, 63.0, 77.1, 69.7], "balacc": [60.5, 57.6, 63.8, 60.6]}]}</script>
+</body>
+</html>
